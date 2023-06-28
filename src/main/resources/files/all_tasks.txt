@@ -1,7 +1,14 @@
 Task ID: 1
 Title: fix bug 1
 Description: do your best 1
-Date: 2023-06-12
+Date: 2023-06-27
+Priority: LOW
+Status: NEW
+
+Task ID: 2
+Title: fix bug 2
+Description: do your best 2
+Date: 2023-06-27
 Priority: HIGH
 Status: NEW
 
@@ -15,28 +22,14 @@ Status: IN_PROGRESS
 Task ID: 4
 Title: fix bug 4
 Description: do your best 4
-Date: 2023-06-12
-Priority: MEDIUM
-Status: NEW
+Date: 2023-06-27
+Priority: HIGH
+Status: DONE
 
 Task ID: 5
 Title: fix bug 5
 Description: do your best 5
-Date: 2023-06-12
-Priority: LOW
-Status: NEW
-
-Task ID: 6
-Title: adana
-Description: do adana
-Date: 2023-06-12
+Date: 2023-06-27
 Priority: HIGH
-Status: NEW
-
-Task ID: 7
-Title: adana2
-Description: do adana2
-Date: 2023-06-12
-Priority: LOW
 Status: NEW
 
