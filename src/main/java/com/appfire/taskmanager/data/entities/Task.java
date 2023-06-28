@@ -4,7 +4,9 @@ import com.appfire.taskmanager.data.enums.Status;
 import com.appfire.taskmanager.data.enums.Priority;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +19,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "task")
 @Table(name = "tasks")
 public class Task implements Serializable {
 
@@ -25,6 +27,7 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Priority priority;
 
@@ -38,7 +41,14 @@ public class Task implements Serializable {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+    @PrePersist
+    public void prePersist() {
+        date = LocalDate.now();
+        status = Status.NEW;
+    }
 
 }
