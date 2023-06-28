@@ -52,6 +52,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task updateTask(Task task) {
+        System.out.println("Task updated!");
         return taskRepository.save(task);
     }
 
