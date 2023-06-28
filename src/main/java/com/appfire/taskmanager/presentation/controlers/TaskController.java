@@ -1,6 +1,6 @@
 package com.appfire.taskmanager.presentation.controlers;
 
-import com.appfire.taskmanager.business.sevices.TaskServiceImpl;
+import com.appfire.taskmanager.business.sevices.TaskService;
 import com.appfire.taskmanager.data.exports.TaskExporterImpl;
 import com.appfire.taskmanager.data.entities.Task;
 import com.appfire.taskmanager.data.enums.Priority;
@@ -21,21 +21,21 @@ import java.util.Optional;
 @RequestMapping("/tasks")
 public class TaskController {
 
-    private final TaskServiceImpl taskServiceImpl;
+    private final TaskService taskService;
 
     @Autowired
-    public TaskController(TaskServiceImpl taskServiceImpl) {
-        this.taskServiceImpl = taskServiceImpl;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @PostMapping("/task")
     public Task createTask(@RequestBody Task task) {
-        return taskServiceImpl.createTask(task);
+        return taskService.createTask(task);
     }
 
     @GetMapping("/task/{id}")
     public @ResponseBody Task getTaskWithId(@PathVariable("id") Integer id) {
-        Optional<Task> task = taskServiceImpl.getTaskById(id);
+        Optional<Task> task = taskService.getTaskById(id);
         if (task.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task with id " + id + " not found");
         } else {
@@ -45,7 +45,7 @@ public class TaskController {
 
     @GetMapping("/task")
     public @ResponseBody Task getTaskWithTitle(@RequestParam(value = "title") String title) {
-        Optional<Task> task = taskServiceImpl.getTaskByTitle(title);
+        Optional<Task> task = taskService.getTaskByTitle(title);
         if (task.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task with title '" + title + "' not found");
         } else {
@@ -55,22 +55,22 @@ public class TaskController {
 
     @GetMapping("/unfinished")
     public List<Task> getUnfinishedTasks() {
-        return taskServiceImpl.getUnfinishedTasks();
+        return taskService.getUnfinishedTasks();
     }
 
     @GetMapping("/newest")
     public List<Task> getNewestTasks() {
-        return taskServiceImpl.getNewestTasks();
+        return taskService.getNewestTasks();
     }
 
     @GetMapping("/all")
     public List<Task> getAllTasks() {
-        return taskServiceImpl.getAllTasks();
+        return taskService.getAllTasks();
     }
 
     @PutMapping("/task/{id}")
     public Task updateTask(@PathVariable("id") Integer id, @RequestBody Map<String, String> data) {
-        Optional<Task> taskToUpdate = taskServiceImpl.getTaskById(id);
+        Optional<Task> taskToUpdate = taskService.getTaskById(id);
 
         if (taskToUpdate.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task with id '" + id + "' not found");
@@ -86,13 +86,13 @@ public class TaskController {
             taskToUpdate.get()
                     .setStatus(Status.valueOf(data.getOrDefault("status", taskToUpdate.get().getStatus().getStatus())));
 
-            return taskServiceImpl.updateTask(taskToUpdate.get());
+            return taskService.updateTask(taskToUpdate.get());
         }
     }
 
     @DeleteMapping("/task/{id}")
     public ResponseEntity<String> deleteById(@PathVariable("id") Integer id) {
-        boolean deleted = taskServiceImpl.deleteTaskById(id);
+        boolean deleted = taskService.deleteTaskById(id);
         if (!deleted) {
             return new ResponseEntity<>("Task with id " + id + " not found", HttpStatus.NOT_FOUND);
         }
@@ -101,7 +101,7 @@ public class TaskController {
 
     @DeleteMapping("/task")
     public ResponseEntity<String> deleteByTitle(@RequestParam(value = "title") String title) {
-        boolean deleted = taskServiceImpl.deleteTaskByTitle(title);
+        boolean deleted = taskService.deleteTaskByTitle(title);
         if (!deleted) {
             return new ResponseEntity<>("Task with id " + title + " not found", HttpStatus.NOT_FOUND);
         }
@@ -110,7 +110,7 @@ public class TaskController {
 
     @GetMapping("/export/{format}")
     public ResponseEntity<String> exportTasks(@PathVariable("format") String format) {
-        List<Task> tasks = taskServiceImpl.getAllTasks();
+        List<Task> tasks = taskService.getAllTasks();
 
         TaskExporterImpl exporter = new TaskExporterImpl(tasks, format);
         exporter.exportTasks();
